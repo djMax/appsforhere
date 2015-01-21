@@ -1,0 +1,98 @@
+{>"layouts/master"/}
+
+{<body}
+
+    <a href="https://github.com/paypal/appsforhere"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <div id="wrapper">
+        <div class="container">
+            <div class="well">
+                <h1>Create a Hosted Application</h1>
+
+                <p>"<a href="https://developer.paypal.com/docs/integration/direct/identity/log-in-with-paypal/">Log In With PayPal</a>"{~n}
+                    (LIPP) is a system that allows you to get credentials to call various PayPal APIs{~n}
+                    on behalf of another PayPal account without ever having that account's password. In other words,{~n}
+                    it lets you build apps on top of PayPal's APIs without your customers completely freaking out{~n}
+                    and having to trust you with the unfettered keys to their money.</p>
+
+                <p>If you're building a mobile application on LIPP, you use a client id and client{~n}
+                    secret to talk to PayPal on behalf of a user. You need a back end service to securely manage these credentials.{~n}
+                    Sometimes you just want to build a simple mobile app or don't have the need or skills on staff{~n}
+                    to build your own back end services (it's not hard - you should do that instead).</p>
+
+                <p>You can use appsforhere to make integration simpler - you enter your application id and secret{~n}
+                    and we will manage getting your application the access tokens it needs to call PayPal APIs. Remember,{~n}
+                    this code is open source and you can review it, host it yourself, push it to {~n}
+                    <a href="www.heroku.com">heroku</a>, or anything else.</p>
+
+            </div>
+            <div class="well">
+                <p>
+
+                <h3>1. Create the Application on PayPal</h3>
+                <b><a href="https://developer.paypal.com/developer/login?successRedirect=https://developer.paypal.com/webapps/developer/applications/myapps">Go to PayPal and create your application</a></b>. Use the following{~n}
+                URL as your "App Return URL":</p>
+
+                <p>
+                    <input type="text" disabled="true" class="form-control" value="https://appsforhere.ebayc3.com/hosted/{appId}/return?uuid={uuid}"/>
+                </p>
+
+            </div>
+            <div class="well">
+                <form action="/hosted" method="POST">
+
+                    <h3>2. Enter the Values From PayPal</h3>
+
+                    <p>Enter the values from the PayPal Developer Site (make sure you enter live/sandbox as intended):</p>
+
+                    <input type="hidden" name="_csrf" value="{_csrf}"/>
+                    <input type="hidden" name="uuid" value="{uuid}"/>
+                    <input type="hidden" name="appId" value="{appId}"/>
+
+                    <div class="form-group">
+                        <label for="ClientID">Client Id</label>
+                        <input type="text" class="form-control" id="ClientID" name="client_id" placeholder="Enter the client id">
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientSecret">Secret</label>
+                        <input type="password" class="form-control" id="ClientSecret" name="secret" placeholder="Enter the client secret">
+                    </div>
+                    <div class="form-group">
+                        <label for="ReturnUrl">Return URL</label>
+                        <input type="text" class="form-control" id="ReturnUrl" name="return_url" placeholder="When login completes, to what URL should we send the browser or application?">
+                    </div>
+                    <div class="form-group">
+                        <label for="Environment">Application Environment</label>
+                        <select class="form-control" id="Environment" name="environment">
+                            <option value="live">Live</option>
+                            <option value="sandbox">Sandbox</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary ladda-button" data-style="expand-right">
+                        <span class="ladda-label">Create Hosted Application</span></button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+{/body}
+
+{<head}
+    <link href="/components/bootstrapValidator/dist/css/bootstrapValidator.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/components/ladda/dist/ladda-themeless.min.css">
+{/head}
+
+{<bodyElements}
+{/bodyElements}
+
+{<scripts}
+    <script type="text/javascript" src="/components/bootstrapValidator/dist/js/bootstrapValidator.js"></script>
+    <script type="text/javascript" src="/components/ladda/dist/spin.min.js"></script>
+    <script type="text/javascript" src="/components/ladda/dist/ladda.min.js"></script>
+    <script type="text/javascript" src="/js/common-addons.js"></script>
+    <script type="text/javascript">
+        var _csrf = '{_csrf}';
+    </script>
+{/scripts}
+
