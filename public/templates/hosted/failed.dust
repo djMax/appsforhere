@@ -1,0 +1,17 @@
+{>"layouts/master" /}
+
+{<body}
+    <br/>
+    <div class="container theme-showcase" role="main">
+
+        <div class="jumbotron" style="margin: 50px 20px">
+            <h1>Oops!</h1>
+            <p>We were unable to complete PayPal Login</p>
+
+            <p>Please try again.</p>
+
+            <p>Error Message: {error.message}</p>
+        </div>
+    </div>
+{/body}
+

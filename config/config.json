@@ -1,4 +1,6 @@
 {
+    "siteBaseUrl": "https://appsforhere.ebayc3.com",
+
     "loginWithPayPal": {
         "sandbox": {
             "client_id": "AeoOpBB2XJWwORPT8Q7NpPQgr8eStz39tt8IsM6wRaxiRg50hdMTSgNk7rFg",
