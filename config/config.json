@@ -6,7 +6,7 @@
             "client_id": "AeoOpBB2XJWwORPT8Q7NpPQgr8eStz39tt8IsM6wRaxiRg50hdMTSgNk7rFg",
             "secret": "EDZTDBAH7SoQsPZxVAJ4n7SvVfMwWGziwLpJsvKj8Ghe8Wxm1Hg70Tt2pXP7",
             "identityUrl": "https://api.sandbox.paypal.com/v1/identity/openidconnect/",
-            "webappsHost": "api.sandbox.paypal.com",
+            "webappsHost": "www.sandbox.paypal.com",
             "hereapiUrl": "https://api.sandbox.paypal.com/retail/merchant/v1/",
             "ppaasUrl": "https://api.sandbox.paypal.com/v1/",
             "authorizationUrl": "https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize",

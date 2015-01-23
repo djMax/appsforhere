@@ -34,7 +34,7 @@
                 URL as your "App Return URL":</p>
 
                 <p>
-                    <input type="text" disabled="true" class="form-control" value="https://appsforhere.ebayc3.com/hosted/{appId}/return?uuid={uuid}"/>
+                    <input type="text" disabled="true" class="form-control" value="{siteBaseUrl}/hosted/{appId}/return?uuid={uuid}"/>
                 </p>
 
             </div>

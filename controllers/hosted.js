@@ -11,6 +11,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var uuid = require('uuid');
 var PayPalStrategy = require('../lib/payPalStrategy');
 var HostedApplication = require('../models/auth/hostedApplication');
+var Liwp = require('../lib/loginWithPayPal');
 
 module.exports = function (router) {
 
@@ -59,7 +60,7 @@ module.exports = function (router) {
             passReqToCallback: true,
             name: req.params.docId,
             scope: req.query.scope || 'openid',
-            callbackURL: req.app.kraken.config.get('siteBaseUrl') + '/hosted/' +
+            callbackURL: req.app.kraken.get('siteBaseUrl') + '/hosted/' +
                 req.params.docId + '/return?uuid=' + req.query.uuid
         };
         if (doc.environment === 'sandbox') {
@@ -89,7 +90,7 @@ module.exports = function (router) {
             url += '?';
         }
 
-        var refresh = req.kraken.config.get('siteBaseUrl') + '/hosted/' +
+        var refresh = req.app.kraken.get('siteBaseUrl') + '/hosted/' +
             req.params.docId + '/refresh?uuid=' + req.query.uuid + '&token=' +
             encodeURIComponent(encToken);
 
@@ -126,7 +127,7 @@ module.exports = function (router) {
                         res.render('hosted/failed', {error: error});
                     };
                     passport.success = function (profile) {
-                        doc.generateRefreshToken(profile.refresh_token, req.query.uuid, function (cryptErr, encToken) {
+                        doc.generateRefreshToken(profile.refresh_token, secureConfig.token_key, function (cryptErr, encToken) {
                             logger.debug('Passport auth succeeded.');
                             res.redirect(buildUrl(doc, req, profile, encToken));
                         });
@@ -136,6 +137,34 @@ module.exports = function (router) {
                         res.render('hosted/failed', {error: error});
                     };
                     passport.authenticate(req, {session: false});
+                }));
+            }));
+        });
+
+    function refresh(req, doc, secureConfig, token, callback) {
+        doc.decryptRefreshToken(token, secureConfig.token_key, req.$eat(function (refresh_token) {
+            var config = {
+                appId: secureConfig.client_id,
+                secret: secureConfig.secret
+            };
+            if (doc.environment === 'sandbox') {
+                var cfg = req.app.kraken.get('loginWithPayPal:sandbox');
+                config.host = cfg.webappsHost;
+            }
+            var liwp = new Liwp(config), tokenInfo = {refresh_token:refresh_token};
+            liwp.refresh(tokenInfo, req.$eat(function () {
+                callback(null, tokenInfo.access_token);
+            }));
+        }));
+    }
+
+    router.route('/:docId/refresh')
+        .get(function (req, res, next) {
+            HostedApplication.findById(req.params.docId, req.$eat(function (doc) {
+                doc.decryptSecureConfiguration(req.query.uuid, req.$eat(function (secureConfig) {
+                    refresh(req, doc, secureConfig, req.query.token, req.$eat(function (at) {
+                        res.json({access_token:at});
+                    }));
                 }));
             }));
         });

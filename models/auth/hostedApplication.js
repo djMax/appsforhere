@@ -16,8 +16,12 @@ var hostedApplication = function () {
 
     util._extend(hostedAppSchema.methods, require('../secureConfig'));
 
-    hostedAppSchema.methods.generateRefreshToken = function (refresh_token, uuid, callback) {
-      crypto.encryptToken(refresh_token, uuid, callback);
+    hostedAppSchema.methods.generateRefreshToken = function (refresh_token, key, callback) {
+      crypto.encryptToken(refresh_token, key, callback);
+    };
+
+    hostedAppSchema.methods.decryptRefreshToken = function (enc_refresh_token, key, callback) {
+        crypto.decryptToken(enc_refresh_token, key, callback);
     };
 
     return mongoose.model('HostedApplication', hostedAppSchema);

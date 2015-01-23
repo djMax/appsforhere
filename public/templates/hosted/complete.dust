@@ -9,20 +9,20 @@
             <p><b>Do not lose your URL</b> or you can't administer this application anymore and you will need to contact
             us to try and delete it.</p>
 
-            <p>https://appsforhere.ebayc3.com/hosted/{appId}?uuid={uuid}</p>
+            <p>{siteBaseUrl}/hosted/{appId}?uuid={uuid}</p>
 
             <p>To edit the return URL for your application, make sure you're logged into appsforhere as {email} and use{~n}
             this URL:</p>
 
-            <p><a href="https://appsforhere.ebayc3.com/hosted/{appId}/edit">https://appsforhere.ebayc3.com/hosted/{appId}/edit</a></p>
+            <p><a href="{siteBaseUrl}/hosted/{appId}/edit">{siteBaseUrl}/hosted/{appId}/edit</a></p>
 
             <p>You should still take steps to restrict access to this value to "trusted people" because it will allow{~n}
-            the person holding this value to build apps that pretend to be your app.
+            the person holding this value to pretend to be your app.
 
             <h3>PayPal Here SDK</h3>
             <p>In the PayPal Here SDK you can set your <i>managedLoginUrl</i> to:</p>
 
-            <p>https://appsforhere.ebayc3.com/hosted/{appId}?uuid={uuid}</p>
+            <p>{siteBaseUrl}/hosted/{appId}?uuid={uuid}</p>
         </div>
     </div>
 {/body}
