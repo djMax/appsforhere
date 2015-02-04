@@ -16,7 +16,7 @@ module.exports = function (router) {
     var hasViewReportRole = appUtils.hasRoles(appUtils.ROLES.ViewReports);
 
     router.get('/', appUtils.auth, hasViewReportRole, function (req, res) {
-       res.render('reports/reports');
+        res.render('reports/reports');
     });
 
     router.get('/api', appUtils.auth, hasViewReportRole, function (req, res) {
@@ -42,10 +42,16 @@ module.exports = function (router) {
             'Invoice Id',
             'Order Number',
             'Invoice Date',
+            'Seller',
             'Currency',
             'Total',
             'Status',
-
+            'Payment Type',
+            'Customer Id',
+            'Name',
+            'Company',
+            'Email',
+            'Phone'
         ]], raw = [], seen = {};
 
         var doPage = function () {
@@ -64,8 +70,7 @@ module.exports = function (router) {
                     raw = raw.concat(json.invoices);
                 }
                 if (json.hasMoreResults) {
-                    console.log('HAS MORE');
-                    end = json.invoices[json.invoices.length-1].invoiceDate;
+                    end = json.invoices[json.invoices.length - 1].invoiceDate;
                     doPage();
                 } else {
                     if (req.query.format === 'csv') {
@@ -73,9 +78,9 @@ module.exports = function (router) {
                             // This isn't the best way to generate this.
                             csvRows[i] = csvRows[i].join(',');
                         }
-                        res.type('text/csv').send(csvRows.join('\n'));
+                        res.type('text/csv').send(csvRows.join('\r\n'));
                     } else {
-                        res.send('<html><body><pre>' + JSON.stringify(raw, null, '\t') + '</pre></body></html>');
+                        res.json(raw);
                     }
                 }
             }));
@@ -84,17 +89,53 @@ module.exports = function (router) {
         doPage();
     });
 
+    function name(info) {
+        if (info.firstName === '') {
+            delete info.firstName;
+        }
+        if (info.lastName === '') {
+            delete info.lastName;
+        }
+        if (info.firstName && info.lastName) {
+            return info.firstName + ' ' + info.lastName;
+        }
+        return info.firstName || info.lastName;
+    }
+
+    function email(address) {
+        return address === 'noreply@here.paypal.com' ? null : address;
+    }
+
+    function assemble(inv) {
+        var blank = {};
+        var invPay = inv.payments[0] || blank;
+        var seller = inv.receiptDetails.merchant.seller || blank;
+        var billing = inv.billingInfo || blank;
+        return [
+            inv.invoiceID,
+            inv.number,
+            inv.invoiceDate,
+            seller.sellerId || inv.merchantEmail,
+            inv.currencyCode,
+            inv.total,
+            inv.status,
+            inv.receiptDetails.payment.method || invPay.paymentType,
+            inv.receiptDetails.payment.cust,
+            name(billing),
+            billing.businessName,
+            email(inv.payerEmail),
+            billing.phoneNumber
+        ];
+    }
+
     function toArray(json, rz, seen) {
         json.invoices.forEach(function (inv) {
             if (!seen[inv.invoiceID]) {
-                rz.push([
-                    inv.invoiceID,
-                    inv.number,
-                    inv.invoiceDate,
-                    inv.currencyCode,
-                    inv.total,
-                    inv.status
-                ]);
+                inv.receiptDetails = inv.receiptDetails || {};
+                inv.receiptDetails.payment = inv.receiptDetails.payment || {};
+                inv.receiptDetails.merchant = inv.receiptDetails.merchant || {};
+                inv.payments = inv.payments || [];
+                rz.push(assemble(inv));
                 seen[inv.invoiceID] = true;
             }
         });

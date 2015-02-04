@@ -49,8 +49,6 @@ module.exports = function (router) {
                     });
                 }));
             }));
-
-            console.log(req.body);
         });
 
     function getPassport(req, secureConfig, doc) {
