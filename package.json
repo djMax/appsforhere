@@ -31,7 +31,6 @@
     "kraken-js": "^1.0.1",
     "less": "^1.7.4",
     "localizr": "^0.1.0",
-    "marked": "^0.3.3",
     "mongodb-queue": "^0.9.1",
     "mongoose-findorcreate": "^0.1.2",
     "morgan": "^1.5.0",
@@ -84,6 +83,7 @@
   },
   "herokuDependencies": {
     "connect-mongo": "^0.4.1",
+    "marky-markdown": "^5.0.2",
     "mongoose": "^3.8.20",
     "lwip": "0.0.5",
     "socket.io": "^1.2.1",

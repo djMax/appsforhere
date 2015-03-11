@@ -5,7 +5,7 @@ var logger = require('pine')(),
     checkinUtils = require('../../lib/apps/utils'),
     App = require('../../models/app'),
     uuid = require('node-uuid'),
-    marked = require('marked');
+    marky = require('marky-markdown');
 
 module.exports = function (router) {
 
@@ -35,8 +35,8 @@ module.exports = function (router) {
             app: req.checkinApp.app,
             key: req.params.uuid,
             id: req.params.id,
-            welcome: req.checkinApp.app.configuration.welcomeMessage ? marked(req.checkinApp.app.configuration.welcomeMessage) : null,
-            thanks: req.checkinApp.app.configuration.thankyouMessage ? marked(req.checkinApp.app.configuration.thankyouMessage) : null
+            welcome: req.checkinApp.app.configuration.welcomeMessage ? marky(req.checkinApp.app.configuration.welcomeMessage).html() : null,
+            thanks: req.checkinApp.app.configuration.thankyouMessage ? marky(req.checkinApp.app.configuration.thankyouMessage).html() : null
         };
         if (req.query.test) {
             model.test = true;
