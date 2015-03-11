@@ -163,7 +163,7 @@ Cart.prototype.getData = function (opt, cb) {
 
         var qtyPrice = '<div style="float:right;">' + accounting.formatMoney(i.totalForInvoice(inv).toString()) + '</div>';
         qtyPrice += '<span class="badge">' + i.quantity + '</span>';
-        var nd = i.name;
+        var nd = $safe(i.name);
         if (i.description) {
             nd += $('<div/>', {class: 'itemDesc', text: i.description}).prop('outerHTML');
         }

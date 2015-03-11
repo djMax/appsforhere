@@ -19,7 +19,7 @@ var HardwareDataSource = function (options) {
             label: 'Host',
             sortable: true
         },{
-            property: 'name',
+            property: 'safeName',
             label: 'Device Name'
         },{
             property: 'id',
@@ -33,6 +33,9 @@ HardwareDataSource.prototype.success = function (data, options, cb) {
     this.sourceData = data.devices||[];
     this._buildResponse(options, cb);
 };
+HardwareDataSource.prototype.formatter = function (ix, item) {
+    item.safeName = $safe(item.name);
+};
 
 var hardwareDataSource = new HardwareDataSource();
 
@@ -42,7 +45,7 @@ var DelegateDataSource = function (options) {
     });
     this._columns = [
         {
-            property: 'name',
+            property: 'safeName',
             label: 'Name',
             sortable: true
         },
@@ -61,6 +64,7 @@ var DelegateDataSource = function (options) {
 
     this._formatter = function (items) {
         $.each(items, function (index, item) {
+            item.safeName = $safe(item.name);
             item.allowedString = item.allowed.map(function (a) {
                 for (var i = 0; i < allRoles.length; i++) {
                     if (allRoles[i].value === a) {
@@ -79,6 +83,7 @@ DelegateDataSource.prototype.success = function (response, options, cb) {
     this._buildResponse(options, cb);
 };
 DelegateDataSource.prototype.formatter = function (index, item) {
+    item.safeName = $safe(item.name);
     item.allowedString = item.allowed.map(function (a) {
         for (var i = 0; i < allRoles.length; i++) {
             if (allRoles[i].value === a) {

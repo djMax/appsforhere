@@ -2,7 +2,7 @@ var ModifierDataSource = function (options) {
 
     this._columns = [
         {
-            property: 'name',
+            property: 'safeName',
             label: 'Name',
             sortable: true
         },
@@ -18,6 +18,7 @@ var ModifierDataSource = function (options) {
     this._formatter = function (items) {
         $.each(items, function (index, item) {
             item.displayPrice = accounting.formatMoney(item.price);
+            item.safeName = $safe(item.name);
         });
     }
 };

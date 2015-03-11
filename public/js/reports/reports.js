@@ -653,7 +653,7 @@ var ProductDataSource = function (options) {
     });
     this._columns = [
         {
-            property: 'itemName',
+            property: 'safeItemName',
             label: 'Name',
             sortable: true
         },
@@ -683,6 +683,7 @@ ProductDataSource.prototype.success = function (data, options, callback) {
 };
 
 ProductDataSource.prototype.formatter = function (index, item) {
+    item.safeItemName = $safe(item.itemName);
     item.salesFormatted = accounting.formatMoney(new BigNumber(item.sales).dividedBy(100));
 };
 

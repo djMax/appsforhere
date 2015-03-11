@@ -5,10 +5,12 @@ var Checkin = function (locationManager, invoiceManager) {
         {
             property: 'imageTag',
             className: 'pph-itemPhoto',
+            label: '<div class="glyphicon glyphicon-camera"></div>',
             width: 30
         },
         {
-            property: 'customerName'
+            label: 'Customer Name',
+            property: 'safeCustomerName'
         }
     ];
     this.selectedTab = null;
@@ -83,6 +85,7 @@ Checkin.prototype.ensurePolling = function () {
 Checkin.prototype.data = function (opt, cb) {
     var t = this.tabs || [];
     for (var i = 0; i < t.length; i++) {
+        t[i].safeCustomerName = $safe(t[i].customerName);
         t[i].imageTag = "<img src=\"" + t[i].photoUrl.replace("\"", "") +
         "\" width=\"40\" height=\"40\"/>";
         t[i].src = t[i].photoUrl;

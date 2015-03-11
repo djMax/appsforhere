@@ -17,7 +17,7 @@ var Catalog = function (invoiceManager) {
             width: 60
         },
         {
-            property: 'name',
+            property: 'safeName',
             label: 'Name',
             sortable: true
         },
@@ -231,6 +231,7 @@ Catalog.prototype.filter = function (data, options) {
 };
 
 Catalog.prototype.formatter = function (index, item) {
+    item.safeName = $safe(item.name);
     item.displayPrice = accounting.formatMoney(item.price);
     if (item.variations && item.variations.length) {
         item.variationCount = item.variations.length;

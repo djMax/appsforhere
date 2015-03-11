@@ -9,7 +9,7 @@ var ProductDataSource = function (options) {
             width: 40
         },
         {
-            property: 'name',
+            property: 'safeName',
             label: 'Name',
             sortable: true
         },
@@ -42,6 +42,7 @@ var ProductDataSource = function (options) {
 
     this._formatter = function (items) {
         $.each(items, function (index, item) {
+            item.safeName = $safe(item.name);
             item.displayPrice = accounting.formatMoney(item.price);
             if (item.variations && item.variations.length) {
                 item.variationCount = item.variations.length;

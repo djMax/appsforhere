@@ -459,3 +459,18 @@ function m$(x) {
     };
 
 }(jQuery));
+
+var _entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+};
+
+function $safe(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return _entityMap[s];
+    });
+}

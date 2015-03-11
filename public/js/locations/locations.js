@@ -9,7 +9,7 @@ var LocationDataSource = function (options) {
             width: 80
         },
         {
-            property: 'internalName',
+            property: 'safeInternalName',
             label: 'Internal Name',
             sortable: true
         },
@@ -41,14 +41,15 @@ var LocationDataSource = function (options) {
                 (item.logoUrl || '/media/image_default_138.png').replace("\"", "") +
                 "\" width=\"80\" height=\"80\"/>";
             var nameadd = [];
-            nameadd.push(item.name);
+            nameadd.push($safe(item.name));
             if (item.address && item.address.line1) {
-                nameadd.push(item.address.line1);
+                nameadd.push($safe(item.address.line1));
             }
             if (item.address && item.address.city) {
-                nameadd.push(item.address.city + ", " + (item.address.state || ""));
+                nameadd.push($safe(item.address.city + ", " + (item.address.state || "")));
             }
             item.nameAndAddr = nameadd.join("<br/>");
+            item.safeInternalName = $safe(item.internalName);
             item.map = "<img src=\"" +
                 "https://maps.googleapis.com/maps/api/staticmap?size=160x80&zoom=14&center=" +
                 item.latitude + "," + item.longitude +
