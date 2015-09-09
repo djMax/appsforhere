@@ -72,7 +72,7 @@ var ProductDataSource = function (options) {
                 (item.photoUrl || '/media/image_default_138.png').replace("\"", "") +
                 "\" width=\"40\" height=\"40\"/>";
             if (item.tags) {
-                item.displayTags = item.tags.join(', ');
+                item.displayTags = $safe(item.tags.join(', '));
             }
         });
     }

@@ -22,7 +22,7 @@ module.exports = function (router) {
     router.get('/api', appUtils.auth, hasViewReportRole, function (req, res) {
         var qs = _.clone(req.query);
         delete qs.url;
-        reportLib.request(req, 'https://pph-reporting.pphme.ebaystratus.com/' + req.query.url + '?' + querystring.stringify(qs),
+        reportLib.request(req, 'https://insights.reporting-vip.ext.external.paypalc3.com/' + req.query.url + '?' + querystring.stringify(qs),
             function (rErr, rz) {
                 if (rErr) {
                     logger.error('Error getting report: %s\n%s', rErr.message, rErr.stack);
