@@ -137,7 +137,7 @@ module.exports = function (router) {
     router.post('/api', appUtils.apiAuth, hasEditRole, function (req, res) {
         logger.debug('Saving location: %j', (req.body && req.body.model) ? req.body.model : 'empty');
         var model = JSON.parse(req.body.model);
-        // We need an eBay picture URL, so we'll have to make one if it isn't already there.
+        // We need an picture URL, so we'll have to make one if it isn't already there.
         if (model.logoUrl && model.logoUrl.length && model.logoUrl.indexOf('https://pics.paypal.com/') !== 0) {
             // TODO factor this out into another fn
             logger.debug('Saving location image');
