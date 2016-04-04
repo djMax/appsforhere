@@ -197,12 +197,12 @@
 
     function confirmAmt(amt) {
         contribAmount = amt;
-        $get('amtSpan').innerText = accounting.formatMoney(amt);
+        $get('amtSpan').innerText = $safe(accounting.formatMoney(amt));
         mask(1, 'confirm');
         return false;
     }
     function customAmount() {
-        confirmAmt($get('customAmount').value);
+        confirmAmt($safe($get('customAmount').value));
     }
     function completePayment() {
         try {
