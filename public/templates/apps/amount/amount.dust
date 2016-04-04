@@ -174,7 +174,7 @@
     {welcome|s}
 
     {#app.configuration.amounts}
-        <button class="pure-button amount" onClick="confirmAmt({.})"><sup class="currency">$</sup>{.}</button>
+        <button class="pure-button amount" onClick="confirmAmt(_configAmounts[{$idx}])"><sup class="currency">$</sup>{.}</button>
     {/app.configuration.amounts}
 
     {?app.configuration.customAmount}
@@ -183,6 +183,10 @@
 </div>
 
 <script type="text/javascript">
+  var _configAmounts = [
+    {#app.configuration.amounts}"{.|j}",{/app.configuration.amounts}
+    0
+  ];
   var _entityMap = {
     "&": "&amp;",
     "<": "&lt;",
@@ -192,7 +196,11 @@
     "/": '&#x2F;'
   };
 
-  function $safe(t) {
+  function $safenum(string) {
+    return String(string).replace(/[^\$0-9\.£]/g, '');
+  }
+
+  function $safe(string) {
     return String(string).replace(/[&<>"'\/]/g, function (s) {
       return _entityMap[s];
     });
@@ -211,13 +219,13 @@
     }
 
     function confirmAmt(amt) {
-        contribAmount = amt;
+        contribAmount = $safenum(amt);
         $get('amtSpan').innerText = $safe(accounting.formatMoney(amt));
         mask(1, 'confirm');
         return false;
     }
     function customAmount() {
-        confirmAmt($safe($get('customAmount').value));
+        confirmAmt($safenum($get('customAmount').value));
     }
     function completePayment() {
         try {
@@ -245,7 +253,7 @@
                         alert("Unable to complete payment. Please try again.");
                     }
                 };
-                var body = "_csrf={_csrf|uc}&amount=" + contribAmount;
+                var body = "_csrf={_csrf|uc}&amount=" + $safe(contribAmount);
                 xmlhttp.open("POST", "/apps/amount/complete/{id}/{key}?" + window.location.search.substring(1), true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xmlhttp.send(body);
