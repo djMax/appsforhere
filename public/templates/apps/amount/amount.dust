@@ -183,6 +183,21 @@
 </div>
 
 <script type="text/javascript">
+  var _entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
+
+  function $safe(t) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+      return _entityMap[s];
+    });
+  }
+
     var contribAmount = 0, masked, $get = function (x) {
         return document.getElementById(x);
     };
